@@ -352,7 +352,7 @@ def get_bulk_arena_map():
     for card in all_cards:
         aid = card.get('arena_id')
         if aid:
-            arena_map[aid] = {'name': card['name'], 'type_line': card.get('type_line', '')}
+            arena_map[aid] = {'name': card['name'], 'type_line': card.get('type_line', ''), 'rarity': card.get('rarity', '')}
 
     with open(BULK_CACHE_FILE, 'w', encoding='utf-8') as f:
         json.dump(arena_map, f)
@@ -547,7 +547,8 @@ def main():
         name = card['name']
         if 'Basic' in card['type_line']:
             continue
-        output_lines.append(f"{owned} {name}")
+        rarity_label = {'rare': ' [金卡]', 'mythic': ' [秘稀卡]'}.get(card.get('rarity', ''), '')
+        output_lines.append(f"{owned} {name}{rarity_label}")
 
     if unknown_count > 0:
         output_lines.append(f"// Total Unknown Cards: {unknown_count}")
